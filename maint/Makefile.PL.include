@@ -4,6 +4,6 @@ use Distar;
 
 author 'mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>';
 
-manifest_include my => qr{.*};
+manifest_include examples => qr{.*};
 
 1;
