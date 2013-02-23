@@ -6,7 +6,7 @@ use IO::All;
 extends 'App::MyPerl';
 
 has file_preamble => (is => 'lazy', builder => sub {
-  join "\n", @{$_[0]->preamble}, "#line 1", '';
+  join "\n", @{$_[0]->preamble},
 });
 
 sub run {
@@ -18,9 +18,15 @@ sub rewrite_dir {
   my ($self, $dir) = @_;
   my $preamble = $self->file_preamble;
   foreach my $file (io->dir($dir)->all_files(0)) {
-    next unless $file->name =~ /\.pm$|\.t$|^bin\//;
+    next unless $file->name =~ /\.pm$|\.t$|^${dir}\/bin\//;
     my $data = $file->all;
-    $file->print($preamble.$data);
+    my $shebang = '';
+    my $line = 1;
+    if ($data =~ s/\A(#!.*\n)//) {
+      $shebang = $1;
+      $line = 2;
+    }
+    $file->print($shebang.$preamble."\n#line ${line}\n".$data);
   }
 }
 
