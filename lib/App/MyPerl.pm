@@ -7,8 +7,18 @@ our $VERSION = '0.001001';
 
 has config_dir => (is => 'lazy', builder => sub { io->dir('.myperl') });
 
+has home_config_dir => (is => 'lazy', builder => sub { io->dir("$ENV{HOME}/.myperl") });
+
+has env_config_dir => (is => 'lazy', builder => sub { io->dir("$ENV{MYPERL}") });
+
 has modules => (is => 'lazy', builder => sub {
-  [ $_[0]->config_dir->catfile('modules')->chomp->slurp ]
+  if ($_[0]->config_dir->is_executable) {
+    [ $_[0]->config_dir->catfile('modules')->chomp->slurp ]
+  } elsif (defined $ENV{MYPERL} && $_[0]->env_config_dir->is_executable) {
+    [ $_[0]->env_config_dir->catfile('modules')->chomp->slurp ]
+  } else {
+    [ $_[0]->home_config_dir->catfile('modules')->chomp->slurp ]
+  }
 });
 
 has preamble => (is => 'lazy', builder => sub {
