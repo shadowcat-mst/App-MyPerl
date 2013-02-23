@@ -5,5 +5,7 @@ use Distar;
 author 'mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>';
 
 manifest_include examples => qr{.*};
+manifest_include bin => qr{my.*};
+manifest_include t => 'root/modules';
 
 1;
