@@ -3,7 +3,7 @@ package App::MyPerl;
 use Moo;
 use IO::All;
 
-our $VERSION = '0.001000';
+our $VERSION = '0.001001';
 
 has config_dir => (is => 'lazy', builder => sub { io->dir('.myperl') });
 
