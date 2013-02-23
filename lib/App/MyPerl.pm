@@ -24,7 +24,7 @@ has preamble => (is => 'lazy', builder => sub {
 has perl_options => (is => 'lazy', builder => sub {
   my ($self) = @_;
   [
-    "-Mlib::with::preamble=${\join(' ', @{$self->preamble})},lib",
+    "-Mlib::with::preamble=${\join(' ', @{$self->preamble})},lib,t/lib",
     (map "-M$_", @{$self->modules})
   ];
 });
