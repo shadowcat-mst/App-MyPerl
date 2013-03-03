@@ -71,7 +71,7 @@ And in your Makefile.PL -
 
   sub MY::postamble {
     q{distdir: myperl_rewrite
-  myperl_rerite: create_distdir
+  myperl_rewrite: create_distdir
         myperl-rewrite $(DISTVNAME)
   };
   }
