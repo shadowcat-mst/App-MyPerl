@@ -70,10 +70,7 @@ To run tests do -
 And in your Makefile.PL -
 
   sub MY::postamble {
-    q{distdir: myperl_rewrite
-  myperl_rerite: create_distdir
-        myperl-rewrite $(DISTVNAME)
-  };
+      qq{distdir: myperl_rewrite\nmyperl_rewrite: create_distdir\n\tmyperl-rewrite \$(DISTVNAME)}
   }
 
 to have the defaults added to the top of .pm, .t and bin/* files in your dist
