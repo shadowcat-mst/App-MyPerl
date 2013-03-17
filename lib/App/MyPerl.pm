@@ -72,12 +72,15 @@ And in your Makefile.PL -
   sub MY::postamble {
     q{distdir: myperl_rewrite
   myperl_rewrite: create_distdir
-        myperl-rewrite $(DISTVNAME)
+  	myperl-rewrite $(DISTVNAME)
   };
   }
 
 to have the defaults added to the top of .pm, .t and bin/* files in your dist
 when it's built for CPAN.
+
+(warning: this is make - so the indent for the myperl-rewrite line needs to
+be a hard tab)
 
 =head1 AUTHOR
 
