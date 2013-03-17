@@ -1,10 +1,8 @@
-use strict;
-use warnings FATAL => 'all';
-use Test::More qw(no_plan);
-use IO::All;
+use strictures 1;
+use Test::More;
 use App::MyPerl;
 
-my $my_perl = App::MyPerl->new(config_dir => io->dir('t/root'));
+my $my_perl = App::MyPerl->new(project_config_dir => 't/root');
 
 is_deeply(
   $my_perl->perl_options,
@@ -12,3 +10,5 @@ is_deeply(
     '-Mstrict', '-Mwarnings=FATAL,all' ],
   'Options ok'
 );
+
+done_testing;

@@ -5,37 +5,10 @@ use IO::All;
 
 our $VERSION = '0.001001';
 
-has config_dir => (is => 'lazy', builder => sub { io->dir('.myperl') });
-
-has modules => (is => 'lazy', builder => sub {
-  [ $_[0]->config_dir->catfile('modules')->chomp->slurp ]
-});
-
-has preamble => (is => 'lazy', builder => sub {
-  [ map {
-      my ($mod, $arg) = split('=', $_, 2);
-      ($arg
-        ? "use ${mod} qw(".join(' ', split ',', $arg).");"
-        : "use ${mod};")
-    } @{$_[0]->modules}
-  ]
-});
-
-has perl_options => (is => 'lazy', builder => sub {
-  my ($self) = @_;
-  [
-    "-Mlib::with::preamble=${\join(' ', @{$self->preamble})},lib,t/lib",
-    (map "-M$_", @{$self->modules})
-  ];
-});
+with 'App::MyPerl::Role::Script';
 
 sub run {
   exec($^X, @{$_[0]->perl_options}, @ARGV);
-}
-
-sub run_if_script {
-  return 1 if caller(1);
-  shift->new->run;
 }
 
 1;

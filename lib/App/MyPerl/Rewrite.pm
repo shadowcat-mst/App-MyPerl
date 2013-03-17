@@ -3,7 +3,9 @@ package App::MyPerl::Rewrite;
 use Moo;
 use IO::All;
 
-extends 'App::MyPerl';
+with 'App::MyPerl::Role::Script';
+
+sub use_files { qw(modules) }
 
 has file_preamble => (is => 'lazy', builder => sub {
   join "\n", @{$_[0]->preamble},
