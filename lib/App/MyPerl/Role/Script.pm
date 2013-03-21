@@ -19,8 +19,8 @@ sub _env_value {
   $ENV{$self->env_prefix.'_'.$name};
 }
 
-has env_global => (is => 'lazy', builder => sub {
-  shift->_env_value('GLOBAL')
+has env_home => (is => 'lazy', builder => sub {
+  shift->_env_value('HOME')
 });
 
 has env_config => (is => 'lazy', builder => sub {
@@ -31,7 +31,7 @@ has config_dir_name => (is => 'lazy', builder => sub { '.myperl' });
 
 has global_config_dir => (is => 'lazy', coerce => $ioify, builder => sub {
   my ($self) = @_;
-  if (my $env = $self->env_global) {
+  if (my $env = $self->env_home) {
     io->dir($env)
   } elsif ($env = $ENV{HOME}) {
     io->dir($env)->catdir($self->config_dir_name)
@@ -49,7 +49,8 @@ has global_always_config_dir => (is => 'lazy', builder => sub {
 });
 
 has project_config_dir => (is => 'lazy', coerce => $ioify, builder => sub {
-  io->dir(shift->config_dir_name)
+  my ($self) = @_;
+  io->dir($self->env_config || $self->config_dir_name)
 });
 
 has final_project_config_dir => (is => 'lazy', builder => sub {
