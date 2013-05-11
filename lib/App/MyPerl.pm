@@ -15,28 +15,65 @@ sub run {
 
 =head1 NAME
 
-App::MyPerl - Your very own set of perl defaults, on a per project basis
+App::MyPerl - Your very own set of perl defaults, on a global or per project basis
 
 =head1 SYNOPSIS
 
-  # .myperl/modules
-  v5.14
+A Perl program usually requires some boilerplate to get some defaults right
+
+  use strict;
+  use warnings;
+  no indirect;
+  use Try::Tiny;
+  use autodie qw(:all);
+
+On top of that you might find Scalar::Util, List::Utils useful all over your code.
+
+myperl allows you define this boilerplate aka perlude once and for all.
+
+=head1 TUTORIAL
+
+if there is no export MYPERL_HOME='~./perl_defaults', '~/.myperl' is by default read
+
+  # .myperl/always/modules
   strictures
   autodie=:all
 
+  # .myperl/defaults/modules
+  v5.14
+
+  # script.pl
+  say "hi"
+
+Now,
+
   $ myperl bin/some-script
 
-Runs some-script with the following already loaded
+will print "hi" and it will include modules in defaults/modules and always/modules
 
-  use v5.14;
-  use strictures;
-  use autodie qw(:all);
+Lets say we have a Perl project,
+    lib/
+    t/
+    bin/
+    README
+    LICENSE
+    Makefile.PL
+    .myperl
+    ...
 
-and through the magic of L<lib::with::preamble>, 'lib/' and 't/lib' are
-already in @INC but files loaded from there will behave as if they had those
-lines in them, too.
+Now,
 
-To run tests do -
+  $ myperl bin/app.pl
+
+will configure perl in such a way that lib/** and t/lib/** bin/** will all
+have the perlude defined in $proj/.myperl/modules and ~/.myperl/always/modules
+thanks to the import hooks in lib::with::perlude
+
+If you don't have a $proj/.myperl/modules, myperl will use ~/.myperl/defaults in place of it
+
+You can configure the directory $proj/.myperl with export MYPERL_CONFIG
+
+Running tests,
 
   $ myprove t/foo.t
 
@@ -49,11 +86,13 @@ And in your Makefile.PL -
   };
   }
 
+(warning: this is make - so the indent for the myperl-rewrite line needs to
+be a hard tab)
+
 to have the defaults added to the top of .pm, .t and bin/* files in your dist
 when it's built for CPAN.
 
-(warning: this is make - so the indent for the myperl-rewrite line needs to
-be a hard tab)
+Have fun with your-perl !
 
 =head1 AUTHOR
 
