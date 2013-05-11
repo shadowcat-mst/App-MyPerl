@@ -17,9 +17,9 @@ sub run {
 
 App::MyPerl - Your very own set of perl defaults, on a global or per project basis
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
-A Perl program usually requires some boilerplate to get some defaults right
+A Perl program usually requires some preamble to get some defaults right
 
   use strict;
   use warnings;
@@ -27,9 +27,9 @@ A Perl program usually requires some boilerplate to get some defaults right
   use Try::Tiny;
   use autodie qw(:all);
 
-On top of that you might find Scalar::Util, List::Utils useful all over your code.
+On top of that you might find L<Scalar::Util>, L<List::Util> useful all over your code.
 
-myperl allows you define this boilerplate aka perlude once and for all.
+myperl allows you define this boilerplate once and for all.
 
 =head1 TUTORIAL
 
@@ -66,8 +66,8 @@ Now,
   $ myperl bin/app.pl
 
 will configure perl in such a way that lib/** and t/lib/** bin/** will all
-have the perlude defined in $proj/.myperl/modules and ~/.myperl/always/modules
-thanks to the import hooks in lib::with::perlude
+have the preamble defined in $proj/.myperl/modules and ~/.myperl/always/modules
+thanks to the import hooks in L<lib::with::perlude>
 
 If you don't have a $proj/.myperl/modules, myperl will use ~/.myperl/defaults in place of it
 
