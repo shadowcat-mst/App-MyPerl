@@ -37,7 +37,7 @@ and through the magic of L<lib::with::preamble>, C<lib/> and C<t/lib/>
 are already in C<@INC> but files loaded from there will behave as if they
 had those lines in them, too.
 
-It is possible to add global defaults, to all scripts and all myperl
+It is possible to add global defaults, to all scripts and all C<myperl>
 projects with C<~/.myperl/defaults/modules> and C<~/.myperl/always/modules>
 
 =head1 DESCRIPTION
@@ -53,7 +53,7 @@ A Perl program usually requires some preamble to get some defaults right
 On top of that you might find L<Scalar::Util>, L<List::Util> useful all over
 your code.
 
-myperl allows you define this boilerplate once and for all.
+C<myperl> allows you define this boilerplate once and for all.
 
 =head1 TUTORIAL
 
@@ -115,8 +115,8 @@ And in your C<Makefile.PL> -
   };
   }
 
-(warning: this is make - so the indent for the myperl-rewrite line needs to
-be a hard tab)
+(warning: this is make - so the indent for the C<myperl-rewrite> line needs
+to be a hard tab)
 
 to have the defaults added to the top of C<.pm, .t and bin/*> files in your
 dist when it's built for CPAN.
