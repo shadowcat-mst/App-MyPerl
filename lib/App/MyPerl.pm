@@ -19,14 +19,12 @@ App::MyPerl - Your very own set of perl defaults, on a global or per project bas
 
 =head1 SYNOPSIS
 
-myperl preamble spec
-
-  # $project/.myperl/modules
+  # .myperl/modules
   v5.14
   strictures
   autodie=:all
 
-$ myperl $project/bin/some-script
+$ myperl bin/some-script
 
 Runs some-script with the following already loaded
 
@@ -34,12 +32,12 @@ Runs some-script with the following already loaded
   use strictures;
   use autodie qw(:all);
 
-and through the magic of L<lib::with::preamble>, '$project/lib/' and '$project/t/lib' are
+and through the magic of L<lib::with::preamble>, C<lib/> and <t/lib> are
 already in @INC but files loaded from there will behave as if they had those
 lines in them, too.
 
-It is possible to add global defaults, to all scripts and all my perl projects with '~/.myperl/defaults/modules'
-and '~/.myperl/always/defaults'
+It is possible to add global defaults, to all scripts and all my perl projects with C<~/.myperl/defaults/modules>
+and C<~/.myperl/always/modules>
 
 =head1 DESCRIPTION
 
@@ -57,25 +55,26 @@ myperl allows you define this boilerplate once and for all.
 
 =head1 TUTORIAL
 
-if there is no 'export MYPERL_HOME="~./perl_defaults"', '~/.myperl' is by default read for global defaults
+if there is no C<export MYPERL_HOME="~./perl_defaults">, C<~/.myperl> is by default read for global defaults
 
-  # .myperl/always/modules
+  # ~/.myperl/always/modules
   strictures
   autodie=:all
 
-  # .myperl/defaults/modules
+  # ~/.myperl/defaults/modules
   v5.14
 
   # ~/some_scripts/script.pl
-  say "hi"
+  say "Hello World"
 
 Now,
 
   $ myperl ~/some_scripts/script.pl
 
-will print "hi" as it includes modules in defaults/modules and always/modules.
+will print C<Hello World>.
 
-Lets say we have a Perl project,
+Let's say you are working on a typical Perl module like,
+
     lib/
     t/
     bin/
@@ -87,21 +86,21 @@ Lets say we have a Perl project,
 
 Now,
 
-  $ myperl ./bin/app.pl
+  $ cd $project_dir; myperl bin/app.pl
 
-will configure perl in such a way that 'lib/**' and 't/lib/**' will all
-have the preamble defined in $proj/.myperl/modules and ~/.myperl/always/modules
+will configure perl in such a way that C<lib/**> and C<t/lib/**>, will all
+have the preamble defined in C<.myperl/modules> and C<~/.myperl/always/modules>
 thanks to the import hooks in L<lib::with::perlude>.
 
-If you don't have a $proj/.myperl/modules, myperl will use ~/.myperl/defaults in place of it
+If you don't have a C<.myperl/modules>, myperl will use C<~/.myperl/defaults> in place of it
 
-You can configure the directory $proj/.myperl with export MYPERL_CONFIG
+You can configure the directory C<$project_dir/.myperl> with C<export MYPERL_CONFIG>
 
 Running tests,
 
   $ myprove t/foo.t
 
-And in your Makefile.PL -
+And in your C<Makefile.PL> -
 
   sub MY::postamble {
     q{distdir: myperl_rewrite
@@ -113,10 +112,8 @@ And in your Makefile.PL -
 (warning: this is make - so the indent for the myperl-rewrite line needs to
 be a hard tab)
 
-to have the defaults added to the top of .pm, .t and bin/* files in your dist
+to have the defaults added to the top of C<.pm, .t and bin/*> files in your dist
 when it's built for CPAN.
-
-Have fun with your-perl !
 
 =head1 AUTHOR
 
@@ -124,7 +121,7 @@ mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>
 
 =head1 CONTRIBUTORS
 
-None yet. Well volunteered? :)
+mucker - some pod changes.
 
 =head1 COPYRIGHT
 
