@@ -27,7 +27,7 @@ Distar/
 MANIFEST.SKIP
 MYMETA.json
 MYMETA.yml
-Makefile
+Makefile*
 blib/
 pm_to_blib
 

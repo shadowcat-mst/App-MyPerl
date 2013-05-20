@@ -8,7 +8,14 @@ our $VERSION = '0.001001';
 with 'App::MyPerl::Role::Script';
 
 sub run {
-  exec($^X, @{$_[0]->perl_options}, @ARGV);
+  my @perl_options = @{$_[0]->perl_options};
+  print @perl_options;
+  if (grep /.pl5?/, @ARGV) {
+    exec($^X, (grep !/oneliners/, @perl_options), @ARGV);
+  }
+  else {
+    exec($^X, @perl_options, @ARGV);
+  }
 }
 
 1;
@@ -24,6 +31,7 @@ project basis
   v5.14
   strictures
   autodie=:all
+  -indirect
 
   $ myperl bin/some-script
 
@@ -32,6 +40,7 @@ Runs some-script with the following already loaded
   use v5.14;
   use strictures;
   use autodie qw(:all);
+  no indirect;
 
 and through the magic of L<lib::with::preamble>, C<lib/> and C<t/lib/>
 are already in C<@INC> but files loaded from there will behave as if they
@@ -42,18 +51,25 @@ projects with C<~/.myperl/defaults/modules> and C<~/.myperl/always/modules>
 
 =head1 DESCRIPTION
 
-A Perl program usually requires some preamble to get some defaults right
+A C<.pm or .pl> file usually requires some preamble to get some defaults right.
 
+  # important ones
   use strict;
   use warnings;
+
+  # good
   no indirect;
-  use Try::Tiny;
   use autodie qw(:all);
+
+  # better exceptions
+  use Try::Tiny;
+  use Carp;
 
 On top of that you might find L<Scalar::Util>, L<List::Util> useful all over
 your code.
 
-C<myperl> allows you define this boilerplate once and for all.
+C<myperl> allows you define this boilerplate once and for all, while
+B<maintaining compatiability> with existing code.
 
 =head1 TUTORIAL
 
@@ -121,13 +137,17 @@ to be a hard tab)
 to have the defaults added to the top of C<.pm, .t and bin/*> files in your
 dist when it's built for CPAN.
 
+And lastly, you can use the C<oneliners::*> namespace for having modules
+imported into C<myperl -e ""> i.e., when no C<.pl> files are passed to 
+myperl.
+
 =head1 AUTHOR
 
 mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>
 
 =head1 CONTRIBUTORS
 
-mucker - (cpan: MUCKER) <mukcer@gmx.com>
+mucker - (cpan:MUCKER) <mukcer@gmx.com>
 
 =head1 COPYRIGHT
 

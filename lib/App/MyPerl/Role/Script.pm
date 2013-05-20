@@ -73,19 +73,30 @@ sub _files_for {
 }
 
 has modules => (is => 'lazy', builder => sub {
-  [ map $_->chomp->slurp,
-      grep $_->exists,
-        map $_[0]->_files_for($_), 
-          @{$_[0]->config_dirs}
+  [ grep !/^#/ && !/^\s*$/,
+      map $_->chomp->slurp,
+        grep $_->exists,
+          map $_[0]->_files_for($_), 
+              @{$_[0]->config_dirs}
   ]
 });
 
 has preamble => (is => 'lazy', builder => sub {
   [ map {
-      my ($mod, $arg) = split('=', $_, 2);
-      ($arg
-        ? "use ${mod} qw(".join(' ', split ',', $arg).");"
-        : "use ${mod};")
+          my ($mod, $arg) = split('=', $_, 2);
+          my $usenouse = "use";
+          if ($mod =~ /^-/) {
+            $usenouse = "no";
+            $mod =~ s/^-//;
+          }
+          if($mod =~ /oneliners/ ) {
+            ();
+          }
+          else {
+              ($arg
+                ? "$usenouse ${mod} qw(".join(' ', split ',', $arg).");"
+                : "$usenouse ${mod};")
+          }
     } @{$_[0]->modules}
   ]
 });
