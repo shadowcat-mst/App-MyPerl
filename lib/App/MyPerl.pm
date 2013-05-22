@@ -152,7 +152,7 @@ to have the defaults added to the top of C<.pm, .t and bin/*> files in your
 dist when it's built for CPAN.
 
 Sometimes though, you want a module to be used during development,
-but not written into the final B<not in the final dist>. A good case
+B<but not written into the final dist>. A good case
 for this is C<indirect>.
 
 For this, add dependencies in say, C<$project_dir/.myperl/dev-modules>.
