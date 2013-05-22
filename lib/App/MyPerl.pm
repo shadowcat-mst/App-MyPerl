@@ -65,7 +65,7 @@ B<maintaining compatiability> with existing code.
 
 =head1 TUTORIAL
 
-If there is no C<export MYPERL_HOME="~./perl_defaults">, C<~/.myperl> is by
+If there is no C<export MYPERL_HOME="~/.perl_defaults">, C<~/.myperl> is by
 default read for global defaults.
 
   # ~/.myperl/always/modules
@@ -80,7 +80,7 @@ default read for global defaults.
 
 The syntax for the modules file is,
 
-=over 
+=over
 
 =item *
 
@@ -92,11 +92,11 @@ C<empty space>
 
 =item *
 
-C<Foo=bar,qux,baz> -- This translates as C<use Foo qw(bar, qux, baz)>
+C<Foo=bar,qux,baz> -- This translates to C<use Foo qw(bar, qux, baz)>
 
 =item *
 
-C<-Foo=bar,qux,baz> -- This translates as C<no Foo qw(bar, qux, baz)>
+C<-Foo=bar,qux,baz> -- This translates to C<no Foo qw(bar, qux, baz)>
 
 =back
 
@@ -127,10 +127,10 @@ C<~/.myperl/always/modules> thanks to the import hooks in
 L<lib::with::preamble>.
 
 If you don't have a C<.myperl/modules>, myperl will use
-C<~/.myperl/defaults/modules> in place of it
+C<~/.myperl/defaults/modules> in place of it.
 
 You can configure the directory C<$project_dir/.myperl> with
-C<export MYPERL_CONFIG>
+C<export MYPERL_CONFIG>.
 
 Running tests,
 
@@ -155,12 +155,11 @@ Sometimes though, you want a module to be used during development,
 B<but not written into the final dist>. A good case
 for this is C<indirect>.
 
-For this, add C<-indirect> in say, 
-C<$project_dir/.myperl/defaults/dev-modules>.
+For this, add C<-indirect> in C<$project_dir/.myperl/dev-modules>.
 
-And lastly, you can add C<if::minus_e=Some::Oneliners> in 
-C<$MYPERL_HOME/.myperl/always/modules> for having
-some utility functions preloaded when using <myperl -e '...'> for oneliners.
+And lastly, you can add C<if::minus_e=Some::Module> in
+C<$MYPERL_HOME/defaults/dev-modules> for having
+C<Some::Module> conveniently preloaded for <myperl -e '...'> oneliners.
 
 =head1 AUTHOR
 

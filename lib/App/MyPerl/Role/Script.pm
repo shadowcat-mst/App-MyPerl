@@ -76,7 +76,7 @@ has modules => (is => 'lazy', builder => sub {
   [ grep !/^#/ && !/^\s*$/,
       map $_->chomp->slurp,
         grep $_->exists,
-          map $_[0]->_files_for($_), 
+          map $_[0]->_files_for($_),
               @{$_[0]->config_dirs}
   ]
 });
