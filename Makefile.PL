@@ -12,6 +12,7 @@ WriteMakefile(
     'IO::All' => '0.46',
     'lib::with::preamble' => '0.001',
     'File::Which' => '1.09',
+    'Module::Runtime' => '0.013',
   },
   EXE_FILES => [ 'bin/myperl', 'bin/myprove', 'bin/myperl-rewrite' ],
 );
