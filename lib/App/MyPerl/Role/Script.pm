@@ -89,9 +89,6 @@ has preamble => (is => 'lazy', builder => sub {
             $usenouse = "no";
             $mod =~ s/^-//;
           }
-          if($mod =~ /oneliners/ ) {
-            ();
-          }
           else {
               ($arg
                 ? "$usenouse ${mod} qw(".join(' ', split ',', $arg).");"

@@ -9,13 +9,8 @@ with 'App::MyPerl::Role::Script';
 
 sub run {
   my @perl_options = @{$_[0]->perl_options};
-  print @perl_options if $ENV{MYPERL_DEBUG};
-  if (grep /\.pl5?$/, @ARGV) {
-    exec($^X, (grep !/oneliners/, @perl_options), @ARGV);
-  }
-  else {
-    exec($^X, @perl_options, @ARGV);
-  }
+  print @perl_options . "\n" if $_[0]->_env_value('DEBUG');
+  exec($^X, @perl_options, @ARGV);
 }
 
 1;
@@ -31,7 +26,6 @@ project basis
   v5.14
   strictures
   autodie=:all
-  -indirect
 
   $ myperl bin/some-script
 
@@ -40,7 +34,6 @@ Runs some-script with the following already loaded
   use v5.14;
   use strictures;
   use autodie qw(:all);
-  no indirect;
 
 and through the magic of L<lib::with::preamble>, C<lib/> and C<t/lib/>
 are already in C<@INC> but files loaded from there will behave as if they
@@ -58,7 +51,6 @@ A C<.pm or .pl> file usually requires some preamble to get some defaults right.
   use warnings;
 
   # good
-  no indirect;
   use autodie qw(:all);
 
   # better exceptions
@@ -74,7 +66,7 @@ B<maintaining compatiability> with existing code.
 =head1 TUTORIAL
 
 If there is no C<export MYPERL_HOME="~./perl_defaults">, C<~/.myperl> is by
-default read for global defaults
+default read for global defaults.
 
   # ~/.myperl/always/modules
   strictures
@@ -85,6 +77,28 @@ default read for global defaults
 
   # ~/some_scripts/script.pl
   say "Hello World"
+
+The syntax for the modules file is,
+
+=over 
+
+=item *
+
+C<comment> -- # comment
+
+=item *
+
+C<empty space>
+
+=item *
+
+C<Foo=bar,qux,baz> -- This translates as C<use Foo qw(bar, qux, baz)>
+
+=item *
+
+C<-Foo=bar,qux,baz> -- This translates as C<no Foo qw(bar, qux, baz)>
+
+=back
 
 Now,
 
@@ -137,9 +151,15 @@ to be a hard tab)
 to have the defaults added to the top of C<.pm, .t and bin/*> files in your
 dist when it's built for CPAN.
 
-And lastly, you can use the C<oneliners::*> namespace for having modules
-imported into C<myperl -e ""> i.e., when no C<.pl> files are passed to 
-myperl.
+Sometimes though, you want a module to be used during development,
+but not written into the final B<not in the final dist>. A good case
+for this is C<indirect>.
+
+For this, add dependencies in say, C<$project_dir/.myperl/dev-modules>.
+
+And lastly, you can add C<if::minus_e=Some::Oneliners> in 
+C<$MYPERL_HOME/.myperl/always/modules> for having
+some utility functions preloaded when using <myperl -e '...'> for oneliners.
 
 =head1 AUTHOR
 

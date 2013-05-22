@@ -7,7 +7,7 @@ with 'App::MyPerl::Role::Script';
 
 sub use_files { qw(modules) }
 
-has file_preamble => (is => 'lazy', builder => sub {
+has exclude_dev_preamble => (is => 'lazy', builder => sub {
   join "\n", @{$_[0]->preamble},
 });
 
@@ -18,7 +18,8 @@ sub run {
 
 sub rewrite_dir {
   my ($self, $dir) = @_;
-  my $preamble = $self->file_preamble;
+  my $preamble = $self->exclude_dev_preamble;
+  print $preamble . "\n" if $self->_env_value('DEBUG');
   foreach my $file (io->dir($dir)->all_files(0)) {
     next unless $file->name =~ /\.pm$|\.t$|^${dir}\/bin\//;
     my $data = $file->all;
