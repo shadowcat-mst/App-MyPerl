@@ -9,7 +9,7 @@ with 'App::MyPerl::Role::Script';
 
 sub run {
   my @perl_options = @{$_[0]->perl_options};
-  print @perl_options . "\n" if $_[0]->_env_value('DEBUG');
+  print "@perl_options . \n" if $_[0]->_env_value('DEBUG');
   exec($^X, @perl_options, @ARGV);
 }
 
@@ -155,7 +155,8 @@ Sometimes though, you want a module to be used during development,
 B<but not written into the final dist>. A good case
 for this is C<indirect>.
 
-For this, add dependencies in say, C<$project_dir/.myperl/dev-modules>.
+For this, add C<-indirect> in say, 
+C<$project_dir/.myperl/defaults/dev-modules>.
 
 And lastly, you can add C<if::minus_e=Some::Oneliners> in 
 C<$MYPERL_HOME/.myperl/always/modules> for having

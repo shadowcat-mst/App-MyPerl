@@ -89,11 +89,9 @@ has preamble => (is => 'lazy', builder => sub {
             $usenouse = "no";
             $mod =~ s/^-//;
           }
-          else {
-              ($arg
+          ($arg
                 ? "$usenouse ${mod} qw(".join(' ', split ',', $arg).");"
                 : "$usenouse ${mod};")
-          }
     } @{$_[0]->modules}
   ]
 });
