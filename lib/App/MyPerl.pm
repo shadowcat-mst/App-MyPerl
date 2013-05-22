@@ -10,7 +10,7 @@ with 'App::MyPerl::Role::Script';
 sub run {
   my @perl_options = @{$_[0]->perl_options};
   print @perl_options if $ENV{MYPERL_DEBUG};
-  if (grep /.pl5?/, @ARGV) {
+  if (grep /\.pl5?$/, @ARGV) {
     exec($^X, (grep !/oneliners/, @perl_options), @ARGV);
   }
   else {
