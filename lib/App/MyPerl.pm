@@ -3,7 +3,7 @@ package App::MyPerl;
 use Moo;
 use IO::All;
 
-our $VERSION = '0.001001';
+our $VERSION = '0.002000';
 
 with 'App::MyPerl::Role::Script';
 
