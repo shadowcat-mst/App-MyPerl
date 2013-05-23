@@ -41,7 +41,7 @@ has global_config_dir => (is => 'lazy', coerce => $ioify, builder => sub {
 });
 
 has global_default_config_dir => (is => 'lazy', builder => sub {
-  shift->global_config_dir->catdir('default')
+  shift->global_config_dir->catdir('defaults')
 });
 
 has global_always_config_dir => (is => 'lazy', builder => sub {

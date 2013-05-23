@@ -2,7 +2,10 @@ use strictures 1;
 use Test::More;
 use App::MyPerl;
 
-my $my_perl = App::MyPerl->new(project_config_dir => 't/root');
+my $my_perl = App::MyPerl->new(
+  global_config_dir => 't/nonexistant',
+  project_config_dir => 't/root'
+);
 
 is_deeply(
   $my_perl->perl_options,
