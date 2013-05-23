@@ -159,7 +159,8 @@ For this, add C<-indirect> in C<$project_dir/.myperl/dev-modules>.
 
 And lastly, you can add C<if::minus_e=Some::Module> in
 C<$MYPERL_HOME/defaults/dev-modules> for having
-C<Some::Module> conveniently preloaded for <myperl -e '...'> oneliners.
+C<Some::Module> conveniently preloaded for <myperl -e '...'> oneliners
+- see L<if::minus_e> for how this behaves in detail.
 
 =head1 AUTHOR
 
