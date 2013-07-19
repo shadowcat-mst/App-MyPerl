@@ -84,14 +84,14 @@ has modules => (is => 'lazy', builder => sub {
 has preamble => (is => 'lazy', builder => sub {
   [ map {
           my ($mod, $arg) = split('=', $_, 2);
-          my $usenouse = "use";
+          my $use_or_no = "use";
           if ($mod =~ /^-/) {
-            $usenouse = "no";
+            $use_or_no = "no";
             $mod =~ s/^-//;
           }
           ($arg
-                ? "$usenouse ${mod} qw(".join(' ', split ',', $arg).");"
-                : "$usenouse ${mod};")
+                ? "$use_or_no ${mod} qw(".join(' ', split ',', $arg).");"
+                : "$use_or_no ${mod};")
     } @{$_[0]->modules}
   ]
 });
