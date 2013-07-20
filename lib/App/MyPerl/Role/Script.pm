@@ -91,10 +91,10 @@ has script_modules => (is => 'lazy', builder => sub {
 });
 
 has preamble => (is => 'lazy', builder => sub {
-  $_[0]->_build_preamble(@{$_[0]->modules})
+  $_[0]->_preamble_from_modules(@{$_[0]->modules})
 });
 
-sub _build_preamble {
+sub _preamble_from_modules {
   my ($self, @modules) = @_;
   [ map {
           my ($mod, $arg) = split('=', $_, 2);

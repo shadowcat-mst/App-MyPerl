@@ -8,13 +8,13 @@ with 'App::MyPerl::Role::Script';
 sub use_files { qw(modules) }
 
 has exclude_dev_preamble => (is => 'lazy', builder => sub {
-  join "\n", @{$_[0]->preamble},
+  join "\n", '# App::MyPerl preamble', @{$_[0]->preamble},
 });
 
 has exclude_dev_script_preamble => (is => 'lazy', builder => sub {
-  join "\n", @{
-    $_[0]->_build_preamble(@{$_[0]->script_modules}, @{$_[0]->modules})
-  },
+  join "\n",
+    '# App::MyPerl script preamble',
+    @{$_[0]->_preamble_from_modules(@{$_[0]->script_modules})};
 });
 
 sub run {
@@ -24,20 +24,28 @@ sub run {
 
 sub rewrite_dir {
   my ($self, $dir) = @_;
-  my $preamble = $self->exclude_dev_preamble;
-  my $script_preamble = $self->exclude_dev_script_preamble;
-  print $preamble . "\n" if $self->_env_value('DEBUG');
-  foreach my $file (io->dir($dir)->all_files(0)) {
-    next unless $file->name =~ /\.pm$|\.t$|^${dir}\/bin\//;
-    my $data = $file->all;
-    my $shebang = '';
-    my $line = 1;
-    if ($data =~ s/\A(#!.*\n)//) {
-      $shebang = $1.$script_preamble;
-      $line = 2;
-    }
-    $file->print($shebang.$preamble."\n#line ${line}\n".$data);
+  if ($self->_env_value('DEBUG')) {
+    warn $self->exclude_dev_script_preamble."\n";
+    warn $self->exclude_dev_preamble."\n";
   }
+  my @files = grep $_->name =~ /\.pm$|\.t$|^${dir}\/bin\//,
+                     io->dir($dir)->all_files(0);
+  foreach my $file (@files) {
+    my $data = $file->all;
+    $file->print($self->rewritten_contents($data));
+  }
+}
+
+sub rewritten_contents {
+  my ($self, $data) = @_;
+  my ($shebang, $line) = do {
+    if ($data =~ s/\A(#!.*\n)//) {
+      ($1.$self->exclude_dev_script_preamble."\n", 2)
+    } else {
+      ('', 1)
+    }
+  };
+  return $shebang.$self->exclude_dev_preamble."\n#line ${line}\n".$data;
 }
 
 1;
