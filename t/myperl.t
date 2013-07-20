@@ -10,7 +10,7 @@ my $my_perl = App::MyPerl->new(
 is_deeply(
   $my_perl->perl_options,
   [ '-Mlib::with::preamble=use strict; use warnings qw(FATAL all);,lib,t/lib',
-    '-Mstrict', '-Mwarnings=FATAL,all' ],
+    '-MCarp::Always', '-Mstrict', '-Mwarnings=FATAL,all' ],
   'Options ok'
 );
 

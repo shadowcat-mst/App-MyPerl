@@ -68,20 +68,34 @@ has config_dirs => (is => 'lazy', builder => sub {
 sub use_files { qw(dev-modules modules) }
 
 sub _files_for {
-  my ($self, $dir) = @_;
-  map $dir->catfile($_), $self->use_files
+  my ($self, $dir, $prefix) = @_;
+  map $dir->catfile($prefix.$_), $self->use_files
 }
 
-has modules => (is => 'lazy', builder => sub {
+sub _build_module_list {
+  my ($self, $prefix) = @_;
   [ grep !/^#/ && !/^\s*$/,
       map $_->chomp->slurp,
         grep $_->exists,
-          map $_[0]->_files_for($_),
-              @{$_[0]->config_dirs}
+          map $self->_files_for($_, $prefix),
+              @{$self->config_dirs}
   ]
+}
+
+has modules => (is => 'lazy', builder => sub {
+  $_[0]->_build_module_list('')
+});
+
+has script_modules => (is => 'lazy', builder => sub {
+  $_[0]->_build_module_list('script-')
 });
 
 has preamble => (is => 'lazy', builder => sub {
+  $_[0]->_build_preamble(@{$_[0]->modules})
+});
+
+sub _build_preamble {
+  my ($self, @modules) = @_;
   [ map {
           my ($mod, $arg) = split('=', $_, 2);
           my $use_or_no = "use";
@@ -92,15 +106,15 @@ has preamble => (is => 'lazy', builder => sub {
           ($arg
                 ? "$use_or_no ${mod} qw(".join(' ', split ',', $arg).");"
                 : "$use_or_no ${mod};")
-    } @{$_[0]->modules}
+    } @modules
   ]
-});
+}
 
 has perl_options => (is => 'lazy', builder => sub {
   my ($self) = @_;
   [
     "-Mlib::with::preamble=${\join(' ', @{$self->preamble})},lib,t/lib",
-    (map "-M$_", @{$self->modules})
+    (map "-M$_", @{$self->script_modules}, @{$self->modules})
   ];
 });
 

@@ -157,8 +157,13 @@ for this is C<indirect>.
 
 For this, add C<-indirect> in C<$project_dir/.myperl/dev-modules>.
 
+To specify modules loaded only into the top level script, prepend C<script->
+to the file name - so C<$project_dir/.myperl/script-modules> specifies
+modules only used for the top level script, and C<script-dev-modules>
+the same but not rewritten onto scripts when myperl-rewrite is invoked.
+
 And lastly, you can add C<if::minus_e=Some::Module> in
-C<$MYPERL_HOME/defaults/dev-modules> for having
+C<$MYPERL_HOME/defaults/script-dev-modules> for having
 C<Some::Module> conveniently preloaded for <myperl -e '...'> oneliners
 - see L<if::minus_e> for how this behaves in detail.
 
