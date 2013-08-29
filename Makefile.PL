@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 (do 'maint/Makefile.PL.include' or die $@) unless -f 'META.yml';
 
 WriteMakefile(
-  NAME => 'App-MyPerl',
+  NAME => 'App::MyPerl',
   VERSION_FROM => 'lib/App/MyPerl.pm',
   PREREQ_PM => {
     Moo => '1.000008',
